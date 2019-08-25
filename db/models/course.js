@@ -3,12 +3,11 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model {}
   Course.init({
-    userId: Sequelize.STRING,
+    userId: Sequelize.INTEGER,
     title: {
       type: Sequelize.STRING,
       validate: {
         notEmpty: true,
-        isEmail: true
       }
     },
     description: {
@@ -24,11 +23,12 @@ module.exports = (sequelize) => {
     materialsNeeded: {
       type: Sequelize.STRING,
       allowNull: true
-    }
+    },
+    userId: Sequelize.INTEGER,
   }, { sequelize });
 
   Course.associate = (models) => {
-    Course.belongTo(models.User);
+    Course.hasOne(models.User)
   };
   return Course;
 };

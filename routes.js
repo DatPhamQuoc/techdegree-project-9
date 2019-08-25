@@ -36,7 +36,10 @@ const authenticateUser = async (req,res,next) => {
     if(user){
       const authenticated = bcryptjs.compareSync(credentials.pass, user.password)
       if(authenticated){
-        req.currentUser = user;
+        req.currentUser = await User.findOne({
+          where: {emailAddress: credentials.name},
+          attributes: { exclude: ['password','createdAt','updatedAt']}
+        })
       }else{
         message = `Authentication failure for username: ${user.emailAddress}`
       }
@@ -56,10 +59,7 @@ const authenticateUser = async (req,res,next) => {
 
 // Returns the currently authenticated user
 router.get('/users',authenticateUser, asyncHandler( async (req,res) => {
-  const users = await User.findAll({
-    attributes: { exclude: ['password','createdAt','updatedAt'] }
-  });
-  res.json(users);
+  res.json(req.currentUser);
 }));
 
 
@@ -105,6 +105,9 @@ router.post('/users', asyncHandler( async (req,res) => {
 // Returns a list of courses (including the user that owns each course)
 router.get('/courses', asyncHandler( async (req,res) => {
   const courses =  await Course.findAll({
+    include: [
+      {model: User}
+    ],
     attributes: { exclude: ['createdAt','updatedAt'] }
   });
   res.json(courses);
@@ -114,6 +117,9 @@ router.get('/courses', asyncHandler( async (req,res) => {
 // Returns a the course (including the user that owns the course) for the provided course ID
 router.get('/courses/:id', asyncHandler( async (req,res) => {
   const course = await Course.findOne({
+    include: [
+      {model: User}
+    ],
     where: {id: req.params.id},
     attributes: {exclude:['createdAt','updatedAt']}
   });
