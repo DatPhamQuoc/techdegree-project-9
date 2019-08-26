@@ -3,7 +3,14 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model {}
   Course.init({
-    userId: Sequelize.INTEGER,
+    userId: {
+            type: Sequelize.INTEGER,
+            references:{
+                model: "users",
+                key: 'id'
+            },
+            allowNull: false
+        },
     title: {
       type: Sequelize.STRING,
       validate: {
@@ -28,7 +35,12 @@ module.exports = (sequelize) => {
   }, { sequelize });
 
   Course.associate = (models) => {
-    Course.hasOne(models.User)
+    Course.belongsTo(models.User, {
+      foreignKey:{
+        fieldName:'userId',
+        allowNull:false
+      }
+    })
   };
   return Course;
 };

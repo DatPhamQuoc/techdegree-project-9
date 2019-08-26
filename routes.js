@@ -106,7 +106,14 @@ router.post('/users', asyncHandler( async (req,res) => {
 router.get('/courses', asyncHandler( async (req,res) => {
   const courses =  await Course.findAll({
     include: [
-      {model: User}
+      {model: User,
+      attributes:[
+                    "id",
+                    "firstName",
+                    "lastName",
+                    "emailAddress"
+                  ]
+      }
     ],
     attributes: { exclude: ['createdAt','updatedAt'] }
   });
@@ -118,7 +125,14 @@ router.get('/courses', asyncHandler( async (req,res) => {
 router.get('/courses/:id', asyncHandler( async (req,res) => {
   const course = await Course.findOne({
     include: [
-      {model: User}
+      {model: User,
+      attributes:[
+                    "id",
+                    "firstName",
+                    "lastName",
+                    "emailAddress"
+                  ]
+      }
     ],
     where: {id: req.params.id},
     attributes: {exclude:['createdAt','updatedAt']}
