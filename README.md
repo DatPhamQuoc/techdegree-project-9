@@ -1,7 +1,7 @@
 
 # Full Stack JavaScript Techdegree v2 - REST API Project
 
-In this project, I use the popular Express web application framework and a SQL database to create a REST API that lets users create, list, update, and delete items from a school database.
+In this project, I use the popular `Express` web application framework and a `SQL database` to create a `REST API` that lets users create, list, update, and delete items from a school database.
 
 ## Overview of the Provided Project Files
 
